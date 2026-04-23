@@ -1,0 +1,7 @@
+@import "./index.css";
+
+.labels {
+  color: rgb(45, 213, 255);
+  font-size: larger;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
