@@ -66,12 +66,6 @@ export default function UserInputs() {
           </p>
         </div>
       </form>
-      {/* <button
-        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-        onClick={handleSubmit}
-      >
-        Calculate
-      </button> */}
 
       <div className="mt-4">
         <Button name="Calculate" onClick={handleSubmit} />
