@@ -1,8 +1,13 @@
 import { useState } from "react";
 import Button from "./Button";
+import type { userInputValuesType } from "../types/userInputValues";
 
-export default function UserInputs() {
-  const [userInputs, setUserInputs] = useState({
+export default function UserInputs({
+  setUserInputValues,
+}: {
+  setUserInputValues: React.Dispatch<React.SetStateAction<userInputValuesType>>;
+}) {
+  const [userInputs, setUserInputs] = useState<userInputValuesType>({
     initialInvestment: 0,
     annualInvestment: 0,
     expectedReturn: 0,
@@ -15,65 +20,63 @@ export default function UserInputs() {
   }
 
   function handleSubmit() {
-    console.log("Submitted values:", userInputs);
+    setUserInputValues(userInputs);
   }
 
   return (
     <>
-      <form>
-        <div className="flex flex-row gap-2">
-          <p className="flex flex-col gap-2">
-            <label className="labels">Initial Investment</label>
-            <input
-              type="number"
-              required
-              className="border "
-              name="initialInvestment"
-              onChange={handleChange}
-            />
-          </p>
-          <p className="flex flex-col gap-2">
-            <label className="labels">Annual Investment</label>
-            <input
-              type="number"
-              required
-              className="border"
-              name="annualInvestment"
-              onChange={handleChange}
-            />
-          </p>
-        </div>
-        <div className="flex flex-row gap-2">
-          <p className="flex flex-col gap-2">
-            <label className="labels">Expected Return</label>
-            <input
-              type="number"
-              required
-              className="border"
-              name="expectedReturn"
-              onChange={handleChange}
-            />
-          </p>
-          <p className="flex flex-col gap-2">
-            <label className="labels">Duration</label>
-            <input
-              type="number"
-              required
-              className="border"
-              name="duration"
-              onChange={handleChange}
-            />
-          </p>
-        </div>
-      </form>
-      {/* <button
-        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-        onClick={handleSubmit}
-      >
-        Calculate
-      </button> */}
+      <div className="input-grid">
+        <p className="field">
+          <label className="labels">Initial Investment</label>
+          <input
+            type="number"
+            required
+            className="field-input"
+            name="initialInvestment"
+            placeholder="e.g., 1000"
+            value={userInputs.initialInvestment}
+            onChange={handleChange}
+          />
+        </p>
+        <p className="field">
+          <label className="labels">Annual Investment</label>
+          <input
+            type="number"
+            required
+            className="field-input"
+            name="annualInvestment"
+            placeholder="e.g., 1000"
+            value={userInputs.annualInvestment}
+            onChange={handleChange}
+          />
+        </p>
+        <p className="field">
+          <label className="labels">Expected Return</label>
+          <input
+            type="number"
+            required
+            className="field-input"
+            name="expectedReturn"
+            placeholder="e.g., 6%"
+            value={userInputs.expectedReturn}
+            onChange={handleChange}
+          />
+        </p>
+        <p className="field">
+          <label className="labels">Duration</label>
+          <input
+            type="number"
+            required
+            className="field-input"
+            name="duration"
+            placeholder="e.g., 1 Year"
+            value={userInputs.duration}
+            onChange={handleChange}
+          />
+        </p>
+      </div>
 
-      <div className="mt-4">
+      <div className="action-row">
         <Button name="Calculate" onClick={handleSubmit} />
       </div>
     </>
