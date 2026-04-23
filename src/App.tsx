@@ -21,16 +21,16 @@ function App() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center py-10">
-        <section className="flex flex-col items-center justify-start">
-          <Header />
-        </section>
-        <section className="flex flex-col items-center justify-start mt-10">
-          <UserInputs setUserInputValues={setUserInputValues} />
-        </section>
-        <section className="flex flex-col items-center justify-start mt-10">
-          <Results userInputValues={userInputValues} />
-        </section>
+      <div className="app-shell">
+        <Header />
+        <div className="calculator-layout">
+          <div className="calculator-form">
+            <UserInputs setUserInputValues={setUserInputValues} />
+          </div>
+          <div className="results-wrap">
+            <Results userInputValues={userInputValues} />
+          </div>
+        </div>
       </div>
     </>
   );

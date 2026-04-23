@@ -8,10 +8,10 @@ export default function UserInputs({
   setUserInputValues: React.Dispatch<React.SetStateAction<userInputValuesType>>;
 }) {
   const [userInputs, setUserInputs] = useState<userInputValuesType>({
-    initialInvestment: 15000,
-    annualInvestment: 1200,
-    expectedReturn: 6,
-    duration: 10,
+    initialInvestment: 0,
+    annualInvestment: 0,
+    expectedReturn: 0,
+    duration: 0,
   });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -21,59 +21,62 @@ export default function UserInputs({
 
   function handleSubmit() {
     setUserInputValues(userInputs);
-    // console.log("Submitted values:", userInputs);
   }
 
   return (
     <>
-      <form>
-        <div className="flex flex-row gap-2">
-          <p className="flex flex-col gap-2">
-            <label className="labels">Initial Investment</label>
-            <input
-              type="number"
-              required
-              className="border "
-              name="initialInvestment"
-              onChange={handleChange}
-            />
-          </p>
-          <p className="flex flex-col gap-2">
-            <label className="labels">Annual Investment</label>
-            <input
-              type="number"
-              required
-              className="border"
-              name="annualInvestment"
-              onChange={handleChange}
-            />
-          </p>
-        </div>
-        <div className="flex flex-row gap-2">
-          <p className="flex flex-col gap-2">
-            <label className="labels">Expected Return</label>
-            <input
-              type="number"
-              required
-              className="border"
-              name="expectedReturn"
-              onChange={handleChange}
-            />
-          </p>
-          <p className="flex flex-col gap-2">
-            <label className="labels">Duration</label>
-            <input
-              type="number"
-              required
-              className="border"
-              name="duration"
-              onChange={handleChange}
-            />
-          </p>
-        </div>
-      </form>
+      <div className="input-grid">
+        <p className="field">
+          <label className="labels">Initial Investment</label>
+          <input
+            type="number"
+            required
+            className="field-input"
+            name="initialInvestment"
+            placeholder="e.g., 1000"
+            value={userInputs.initialInvestment}
+            onChange={handleChange}
+          />
+        </p>
+        <p className="field">
+          <label className="labels">Annual Investment</label>
+          <input
+            type="number"
+            required
+            className="field-input"
+            name="annualInvestment"
+            placeholder="e.g., 1000"
+            value={userInputs.annualInvestment}
+            onChange={handleChange}
+          />
+        </p>
+        <p className="field">
+          <label className="labels">Expected Return</label>
+          <input
+            type="number"
+            required
+            className="field-input"
+            name="expectedReturn"
+            placeholder="e.g., 6%"
+            value={userInputs.expectedReturn}
+            onChange={handleChange}
+          />
+        </p>
+        <p className="field">
+          <label className="labels">Duration</label>
+          <input
+            type="number"
+            required
+            className="field-input"
+            name="duration"
+            placeholder="e.g., 1 Year"
+            value={userInputs.duration}
+            onChange={handleChange}
+          />
+        </p>
+      </div>
 
-      <div className="mt-4">
+      <div className="action-row">
         <Button name="Calculate" onClick={handleSubmit} />
       </div>
     </>

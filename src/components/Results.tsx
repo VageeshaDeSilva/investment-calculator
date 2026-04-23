@@ -1,16 +1,21 @@
 import type { userInputValuesType } from "../types/userInputValues";
 import { calculateInvestmentResults, formatter } from "../utils/investment.ts";
+import Chart from "./Chart";
 
 export default function Results({
   userInputValues,
 }: {
   userInputValues: userInputValuesType;
 }) {
-  //   console.log("Received values in Results component:", userInputValues);
-
   const calculatedResults = calculateInvestmentResults(userInputValues);
+
   if (calculatedResults.length === 0) {
-    return <p>Please enter a duration greater than 0 to see results.</p>;
+    return (
+      <p className="results-empty">
+        Enter your values and press <strong>Calculate</strong> to see
+        projections.
+      </p>
+    );
   }
 
   const initialInvestment =
@@ -18,58 +23,81 @@ export default function Results({
     calculatedResults[0].interest -
     calculatedResults[0].annualInvestment;
 
+  const lastResult = calculatedResults[calculatedResults.length - 1];
+  const totalInterestFinal =
+    lastResult.valueEndOfYear -
+    lastResult.annualInvestment * lastResult.year -
+    initialInvestment;
+  const totalInvested = lastResult.valueEndOfYear - totalInterestFinal;
+
+  const chartData = calculatedResults.map((r) => ({
+    year: r.year,
+    value: r.valueEndOfYear,
+  }));
+
   return (
     <>
-      <h1>Results</h1>
-      {/* <p>Initial Investment: {calculatedResults.year}</p>
-      <p>Annual Investment: {calculatedResults.interest}</p>
-      <p>Expected Return: {calculatedResults.valueEndOfYear}</p>
-      <p>Duration: {calculatedResults.annualInvestment}</p> */}
-      <table className="table-auto border-collapse border border-gray-400">
-        <thead>
-          <tr>
-            <th className="border border-gray-400 px-4 py-2">Year</th>
-            <th className="border border-gray-400 px-4 py-2">
-              Investment value
-            </th>
-            <th className="border border-gray-400 px-4 py-2">Interest(year)</th>
-            <th className="border border-gray-400 px-4 py-2">Total Interest</th>
-            <th className="border border-gray-400 px-4 py-2">
-              Invested Capital
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {calculatedResults.map((results) => {
-            const totalInterest =
-              results.valueEndOfYear -
-              results.annualInvestment * results.year -
-              initialInvestment;
+      {/* <h2 className="results-heading">Results</h2> */}
 
-            const totalAmountInvested = results.valueEndOfYear - totalInterest;
+      {/* Projection chart card */}
+      <div className="projection-card">
+        <p className="projection-card-title">Projection Summary</p>
+        <Chart data={chartData} />
+      </div>
 
-            return (
-              <tr key={results.year}>
-                <td className="border border-gray-400 px-4 py-2">
-                  {results.year}
-                </td>
-                <td className="border border-gray-400 px-4 py-2">
-                  {formatter.format(results.valueEndOfYear)}
-                </td>
-                <td className="border border-gray-400 px-4 py-2">
-                  {formatter.format(results.interest)}
-                </td>
-                <td className="border border-gray-400 px-4 py-2">
-                  {formatter.format(totalInterest)}
-                </td>
-                <td className="border border-gray-400 px-4 py-2">
-                  {formatter.format(totalAmountInvested)}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {/* Stat boxes */}
+      <div className="stat-row">
+        <div className="stat-box">
+          <p className="stat-label">Total Invested</p>
+          <p className="stat-value">{formatter.format(totalInvested)}</p>
+        </div>
+        <div className="stat-box">
+          <p className="stat-label">Total Interest Earned</p>
+          <p className="stat-value">{formatter.format(totalInterestFinal)}</p>
+        </div>
+        <div className="stat-box">
+          <p className="stat-label">Value After {lastResult.year} Years</p>
+          <p className="stat-value">
+            {formatter.format(lastResult.valueEndOfYear)}
+          </p>
+        </div>
+      </div>
+
+      {/* Year-by-year table */}
+      <div className="table-card">
+        <p className="table-card-title">Year-by-Year Growth</p>
+        <table className="results-table">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Invested Capital</th>
+              <th>Interest</th>
+              <th>Total Interest</th>
+              <th>Total Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {calculatedResults.map((results) => {
+              const totalInterest =
+                results.valueEndOfYear -
+                results.annualInvestment * results.year -
+                initialInvestment;
+              const totalAmountInvested =
+                results.valueEndOfYear - totalInterest;
+
+              return (
+                <tr key={results.year}>
+                  <td>{results.year}</td>
+                  <td>{formatter.format(totalAmountInvested)}</td>
+                  <td>{formatter.format(results.interest)}</td>
+                  <td>{formatter.format(totalInterest)}</td>
+                  <td>{formatter.format(results.valueEndOfYear)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }
