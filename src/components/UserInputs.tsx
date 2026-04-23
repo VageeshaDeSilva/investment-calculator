@@ -1,8 +1,13 @@
 import { useState } from "react";
 import Button from "./Button";
+import type { userInputValuesType } from "../types/userInputValues";
 
-export default function UserInputs() {
-  const [userInputs, setUserInputs] = useState({
+export default function UserInputs({
+  setUserInputValues,
+}: {
+  setUserInputValues: React.Dispatch<React.SetStateAction<userInputValuesType>>;
+}) {
+  const [userInputs, setUserInputs] = useState<userInputValuesType>({
     initialInvestment: 0,
     annualInvestment: 0,
     expectedReturn: 0,
@@ -15,7 +20,8 @@ export default function UserInputs() {
   }
 
   function handleSubmit() {
-    console.log("Submitted values:", userInputs);
+    setUserInputValues(userInputs);
+    // console.log("Submitted values:", userInputs);
   }
 
   return (
