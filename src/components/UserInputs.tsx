@@ -8,10 +8,10 @@ export default function UserInputs({
   setUserInputValues: React.Dispatch<React.SetStateAction<userInputValuesType>>;
 }) {
   const [userInputs, setUserInputs] = useState<userInputValuesType>({
-    initialInvestment: 0,
-    annualInvestment: 0,
-    expectedReturn: 0,
-    duration: 0,
+    initialInvestment: 15000,
+    annualInvestment: 1200,
+    expectedReturn: 6,
+    duration: 10,
   });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

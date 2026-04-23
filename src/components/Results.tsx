@@ -1,5 +1,5 @@
 import type { userInputValuesType } from "../types/userInputValues";
-import { calculateInvestmentResults } from "../utils/investment.ts";
+import { calculateInvestmentResults, formatter } from "../utils/investment.ts";
 
 export default function Results({
   userInputValues,
@@ -9,7 +9,14 @@ export default function Results({
   //   console.log("Received values in Results component:", userInputValues);
 
   const calculatedResults = calculateInvestmentResults(userInputValues);
-  console.log("Calculated Results:", calculatedResults);
+  if (calculatedResults.length === 0) {
+    return <p>Please enter a duration greater than 0 to see results.</p>;
+  }
+
+  const initialInvestment =
+    calculatedResults[0].valueEndOfYear -
+    calculatedResults[0].interest -
+    calculatedResults[0].annualInvestment;
 
   return (
     <>
@@ -22,32 +29,45 @@ export default function Results({
         <thead>
           <tr>
             <th className="border border-gray-400 px-4 py-2">Year</th>
-            <th className="border border-gray-400 px-4 py-2">Interest</th>
             <th className="border border-gray-400 px-4 py-2">
-              Value at End of the Year
+              Investment value
             </th>
+            <th className="border border-gray-400 px-4 py-2">Interest(year)</th>
+            <th className="border border-gray-400 px-4 py-2">Total Interest</th>
             <th className="border border-gray-400 px-4 py-2">
-              Annual Investment
+              Invested Capital
             </th>
           </tr>
         </thead>
         <tbody>
-          {calculatedResults.map((results) => (
-            <tr key={results.year}>
-              <td className="border border-gray-400 px-4 py-2">
-                {results.year}
-              </td>
-              <td className="border border-gray-400 px-4 py-2">
-                {results.interest}
-              </td>
-              <td className="border border-gray-400 px-4 py-2">
-                {results.valueEndOfYear}
-              </td>
-              <td className="border border-gray-400 px-4 py-2">
-                {results.annualInvestment}
-              </td>
-            </tr>
-          ))}
+          {calculatedResults.map((results) => {
+            const totalInterest =
+              results.valueEndOfYear -
+              results.annualInvestment * results.year -
+              initialInvestment;
+
+            const totalAmountInvested = results.valueEndOfYear - totalInterest;
+
+            return (
+              <tr key={results.year}>
+                <td className="border border-gray-400 px-4 py-2">
+                  {results.year}
+                </td>
+                <td className="border border-gray-400 px-4 py-2">
+                  {formatter.format(results.valueEndOfYear)}
+                </td>
+                <td className="border border-gray-400 px-4 py-2">
+                  {formatter.format(results.interest)}
+                </td>
+                <td className="border border-gray-400 px-4 py-2">
+                  {formatter.format(totalInterest)}
+                </td>
+                <td className="border border-gray-400 px-4 py-2">
+                  {formatter.format(totalAmountInvested)}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </>
